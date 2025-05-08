@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Clientes>
+	<Cliente>
+		<id>1</id>
+		<nombre>Juan</nombre>
+		<apellido>Pérez</apellido>
+		<email>juan@example.com</email>
+		<password>1234</password>
+		<movil>123456789</movil>
+		<EsVIP>true</EsVIP>
+	</Cliente>
+</Clientes>

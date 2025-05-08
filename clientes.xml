@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfCliente xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Cliente>
+    <id>1</id>
+    <nombre>Juan</nombre>
+    <apellido>Pérez</apellido>
+    <email>juan@example.com</email>
+    <password>1234</password>
+    <movil>123456789</movil>
+    <EsVIP>true</EsVIP>
+  </Cliente>
+  <Cliente>
+    <id>2</id>
+    <nombre>Ana</nombre>
+    <apellido>García</apellido>
+    <email>ana@example.com</email>
+    <password>abcd</password>
+    <movil>987654321</movil>
+    <EsVIP>false</EsVIP>
+  </Cliente>
+</ArrayOfCliente>

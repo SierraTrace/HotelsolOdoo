@@ -1,0 +1,6 @@
+@HotelSOL_HostAddress = http://localhost:5287
+
+GET {{HotelSOL_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
