@@ -1,77 +1,42 @@
 using HotelSOL.Data;
-using HotelSOL.Repositories;
-using HotelSOL.Repositorio;
-using HotelSOL.Repositorio.Interfaces;
-using HotelSOL.Repositorios.Interfaces;
-using HotelSOL.Repositorios;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using HotelSOL.Client;
+using System.Windows.Forms;
 
-
-
-var builder = WebApplication.CreateBuilder(args);
-AppContext.SetSwitch("System.Net.Security.SslStreamCertificateValidationIgnoreErrors", true);
-
-// Configurar EF Core con SQL Server
-builder.Services.AddDbContext<HotelContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("HotelDB")));
-
-// Repositorios registrados para inyección de dependencias
-builder.Services.AddScoped<IRecepcionistaRepository, RecepcionistaRepository>();
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<IAdministradorRepository, AdministradorRepository>();
-builder.Services.AddScoped<IAlojamientoRepository, AlojamientoRepository>();
-builder.Services.AddScoped<ICalendarioRepository, CalendarioRepository>();
-builder.Services.AddScoped<IFacturaRepository, FacturaRepository>();
-builder.Services.AddScoped<IServicioRepository, ServicioRepository>();
-builder.Services.AddScoped<IDetalleFacturaServicioRepository, DetalleFacturaServicioRepository>();
-builder.Services.AddScoped<IReservaRepository, ReservaRepository>();
-
-// Add Swagger & Controllers
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
-
-var app = builder.Build();
-
-// Configuración del pipeline HTTP
-if (app.Environment.IsDevelopment())
+namespace HotelSOL.Client
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    static class Program
+    {
+        public static HotelContext Context;
+
+        [STAThread]
+        static void Main()
+        {
+            AppContext.SetSwitch("System.Net.Security.SslStreamCertificateValidationIgnoreErrors", true);
+
+            var options = new DbContextOptionsBuilder<HotelContext>()
+                .UseSqlServer("Server=localhost;Database=hotelsol;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True")
+                .Options;
+
+            Context = new HotelContext(options);
+
+            try
+            {
+                
+                Context.Database.EnsureCreated();
+                PoblarDB.InicializarAsync(Context).Wait();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error conectando o creando la base de datos:\n{ex.Message}", "Error de conexi�n", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; 
+            }
+
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new FormLogin());
+
+
+        }
+    }
 }
-
-app.MapControllers();
-
-
-// Seed de datos iniciales SOLO si la base de datos está vacía
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<HotelContext>();
-    await PoblarDB.InicializarAsync(context);
-}
-
-//Test conexion
-
-var connStr = builder.Configuration.GetConnectionString("HotelDB");
-Console.WriteLine("Cadena de conexión: " + connStr);
-
-try
-{
-    using var conn = new SqlConnection(connStr);
-    conn.Open();
-    Console.WriteLine("✅ Conexión directa abierta con éxito");
-
-    using var cmd = new SqlCommand("SELECT COUNT(*) FROM Usuarios", conn);
-    var result = cmd.ExecuteScalar();
-    Console.WriteLine("Total usuarios: " + result);
-}
-catch (Exception ex)
-{
-    Console.WriteLine("❌ Error de conexión directa: " + ex.Message);
-}
-
-
-app.Run();
-
