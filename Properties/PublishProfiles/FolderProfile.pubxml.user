@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\Users\PCCom\Desktop</_PublishTargetUrl>
+    <History>True|2025-05-07T08:19:06.9579694Z||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="HotelDB">
+      <Value>Server=localhost%3bDatabase=hotelsol%3bTrusted_Connection=True%3bEncrypt=True%3bTrustServerCertificate=True</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="HotelSOL.Data.HotelContext">
+      <Value>Server=localhost%3bDatabase=hotelsol%3bTrusted_Connection=True%3bEncrypt=True%3bTrustServerCertificate=True</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>
